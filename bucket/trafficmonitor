@@ -1,0 +1,50 @@
+{
+    "version": "1.90",
+    "description": "TrafficMonitor is a network monitoring software with floating window feature for Windows. It displays the current internet speed and CPU and RAM usage. There are also other capabilities like an embedded display in the taksbar, changeable display skins, and historical traffic statistics.",
+    "homepage": "https://github.com/yxyzjuGIT/TrafficMonitor/blob/master/README_en-us.md",
+    "license": "MIT",
+    "suggest": {
+        "vcredist": "extras/vcredist2022"
+    },
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/yxyzjuGIT/TrafficMonitor/releases/download/V1.90/TrafficMonitor_V1.90_x64.rar",
+            "hash": "1372a5d8bd2dd3440a5985d598087d65175396458ee29a13ba163c6a683342be"
+        }
+    },
+    "extract_dir": "TrafficMonitor",
+    "pre_install": [
+        "    # Portable migration",
+        "if (!(Test-Path \"$persist_dir\") -and (Test-Path \"$env:APPDATA\\TrafficMonitor\\config.ini\")) {",
+        "    ensure \"$persist_dir\" | Out-Null",
+        "    Copy-Item -Recurse \"$env:APPDATA\\TrafficMonitor\\*\" \"$persist_dir\"",
+        "    Rename-Item \"$env:APPDATA\\TrafficMonitor\" 'TrafficMonitor.old'",
+        "}",
+        "",
+        "if (!(Test-Path \"$persist_dir\\config.ini\")) { Set-Content \"$dir\\config.ini\" @('[general]', 'check_update_when_start = false') -Encoding Ascii }",
+        "if (!(Test-Path \"$persist_dir\\global_cfg.ini\")) { Set-Content \"$dir\\global_cfg.ini\" @('[config]', 'portable_mode = true') -Encoding Ascii }",
+        "if (!(Test-Path \"$persist_dir\\history_traffic.dat\")) { New-Item \"$dir\\history_traffic.dat\" | Out-Null }"
+    ],
+    "shortcuts": [
+        [
+            "TrafficMonitor.exe",
+            "TrafficMonitor"
+        ]
+    ],
+    "persist": [
+        "config.ini",
+        "global_cfg.ini",
+        "history_traffic.dat",
+        "plugins"
+    ],
+    "checkver": {
+        "github": "https://github.com/yxyzjuGIT/TrafficMonitor"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/yxyzjuGIT/TrafficMonitor/releases/download/V$version/TrafficMonitor_V$version_x64.rar"
+            }
+        }
+    }
+}
